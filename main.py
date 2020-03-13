@@ -76,17 +76,13 @@ if __name__ == "__main__":
   parser.add_argument('-o', '--outfile', help='Output file')
   parser.add_argument('-f', '--files', nargs='+', help='files to encrypr')
   parser.add_argument('-d', '--decrypt',  action='store_true', help='Decrypt flag')
-  parser.add_argument('-k', '--key', help='keyfile')
+  parser.add_argument('-k', '--key', help='keyfile', default=keyFileName)
   parser.add_argument('--init', action='store_true', help='Init new key')
 
   args = parser.parse_args()
-  print(args)
+
   if args.init:
     initKey()
-    exit()
-
-  if not args.key:
-    raise Exception('Argument key is requaried')
 
   key = loadKey(args.key)
   com = combinator(key)
