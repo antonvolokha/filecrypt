@@ -6,13 +6,16 @@ Copyright (c) 2020 BaDMaN Soft
 '''
 
 from cryptography.fernet import Fernet
-from config import keyFileName
+from config import keyFileName, keyValue
+import os
+import zipfile
 import json
 import argparse
 
 
 class combinator:
   delimiter = '===='
+  zipName = 'data.zip'
 
   def __init__(self, key: bytes, delimiter = None):
     self.key = key
@@ -21,6 +24,16 @@ class combinator:
 
   def combineFiles(self, infile: str, output: str, filenames: list):
     fernet = Fernet(self.key)
+
+    for i in range(0, len(filenames), 1):
+      if os.path.isdir(filenames[i]):
+        archiveName = str(i) + self.zipName
+        zipf = zipfile.ZipFile(archiveName, 'w', zipfile.ZIP_DEFLATED)
+        self.zipdir(filenames[i], zipf)
+        zipf.close()
+
+        filenames[i] = archiveName
+
     filenames.insert(0, infile)
 
     with open(output, 'wb') as outfile:
@@ -38,6 +51,8 @@ class combinator:
 
         index += 1
 
+    self.clear()
+
   def decombain(self, inputFile: str):
     fernet = Fernet(self.key)
     with open(inputFile, 'rb') as infile:
@@ -50,6 +65,9 @@ class combinator:
           with open(info['filename'], 'wb') as outfile:
             outfile.writelines(file)
 
+          if '.zip' in info['filename']:
+            self.unzipdir(info['filename'], './')
+
           file = []
           index += 1
           continue
@@ -57,10 +75,22 @@ class combinator:
         if index == 0:
           file.append(line)
         elif line != b'\n':
-          print(line)
           file.append(fernet.decrypt(line))
         else:
           continue
+
+  def clear(self):
+    os.system('rm *.zip')
+
+  def zipdir(self, path: str, ziph):
+    # ziph is zipfile handle
+    for root, dirs, files in os.walk(path):
+      for file in files:
+          ziph.write(os.path.join(root, file))
+
+  def unzipdir(self, zipFile: str, path: str):
+    with zipfile.ZipFile(zipFile, 'r') as zip_ref:
+      zip_ref.extractall(path)
 
 def initKey():
   key = Fernet.generate_key()
@@ -68,13 +98,16 @@ def initKey():
     key_file.write(key)
 
 def loadKey(keyFile):
-  return open(keyFile, "rb").read()
+  if os.path.exists(keyFile) and os.path.isfile(keyFile):
+    return open(keyFile, "rb").read()
+
+  return keyValue
 
 if __name__ == "__main__":
   parser = argparse.ArgumentParser(description='BaDMaN soft')
   parser.add_argument('-i', '--infile', help='Main file to crypt')
   parser.add_argument('-o', '--outfile', help='Output file')
-  parser.add_argument('-f', '--files', nargs='+', help='files to encrypr')
+  parser.add_argument('-f', '--files', nargs='+', help='files to encrypr or folder')
   parser.add_argument('-d', '--decrypt',  action='store_true', help='Decrypt flag')
   parser.add_argument('-k', '--key', help='keyfile', default=keyFileName)
   parser.add_argument('--init', action='store_true', help='Init new key')
@@ -89,7 +122,10 @@ if __name__ == "__main__":
 
   if args.decrypt and args.infile:
     com.decombain(args.infile)
-  elif args.infile and args.outfile and args.files:
+  elif args.infile and args.files:
+    if args.outfile == None:
+      args.outfile = args.infile
+
     com.combineFiles(args.infile, args.outfile, args.files)
   else:
     raise Exception('Arguments is empty')
