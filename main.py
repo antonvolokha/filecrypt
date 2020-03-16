@@ -66,7 +66,7 @@ class combinator:
             outfile.writelines(file)
 
           if '.zip' in info['filename']:
-            self.unzipdir(info['filename'], './')
+            self.unzipdir(info['filename'], 'zipData')
 
           file = []
           index += 1
@@ -78,6 +78,8 @@ class combinator:
           file.append(fernet.decrypt(line))
         else:
           continue
+
+    self.clear()
 
   def clear(self):
     os.system('rm *.zip')
