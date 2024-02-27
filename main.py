@@ -5,19 +5,25 @@ Author: BaDMaN
 Copyright (c) 2024 BaDMaN Soft
 """
 
+import sys
 import argparse
+
+from cli_menu import main_menu
 from core.encryption_core import EncryptionCore
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='BaDMaN soft')
-    parser.add_argument('-i', '--infile', help='Main file to crypt')
-    parser.add_argument('-o', '--outfile', help='Output file')
-    parser.add_argument('-f', '--files', nargs='+', help='files to encrypr or folder')
-    parser.add_argument('-d', '--decrypt', action='store_true', help='Decrypt flag')
-    parser.add_argument('-p', '--passphrase', help='Your password')
+    if len(sys.argv) == 1:
+        args = main_menu()
+    else:
+        parser = argparse.ArgumentParser(description='BaDMaN soft')
+        parser.add_argument('-i', '--infile', help='Main file to crypt')
+        parser.add_argument('-o', '--outfile', help='Output file')
+        parser.add_argument('-f', '--files', nargs='+', help='files to encrypr or folder')
+        parser.add_argument('-d', '--decrypt', action='store_true', help='Decrypt flag')
+        parser.add_argument('-p', '--passphrase', help='Your password')
 
-    args = parser.parse_args()
+        args = parser.parse_args()
 
     core = EncryptionCore(
         infile=args.infile,
