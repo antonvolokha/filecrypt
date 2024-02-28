@@ -8,10 +8,13 @@ class EncryptionCore:
     def __init__(
             self,
             infile: str,
-            outfile: str | None,
-            files: list,
+            outfile: str | None = None,
+            files: list | None = None,
             passphrase: str | None = None,
     ):
+        if files is None:
+            files = []
+
         self.zip_file = create_tmp_zip_file()
         self.input_file = infile
         self.out_file = outfile or infile
