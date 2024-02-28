@@ -45,20 +45,20 @@ class EncryptionCore:
             with open(self.input_file, 'rb') as infile:
                 file = []
                 for line in infile.readlines():
-                    if delimiter_encoded in line:
-                        metadata = FileMetaData(json_data=line.replace(delimiter_encoded, ''.encode()))
-
-                        if metadata.is_zip():
-                            self.zip_file = metadata
-                            with open(metadata.filepath, 'wb') as outfile:
-                                outfile.writelines(file)
-
-                            unzip_to_directory(metadata.filepath, self.passphrase)
-
-                        file = []
+                    if delimiter_encoded not in line:
+                        file.append(line)
                         continue
 
-                    file.append(line)
+                    metadata = FileMetaData(json_data=line.replace(delimiter_encoded, ''.encode()))
+
+                    if metadata.is_zip():
+                        self.zip_file = metadata
+                        with open(metadata.filepath, 'wb') as outfile:
+                            outfile.writelines(file)
+
+                        unzip_to_directory(metadata.filepath, self.passphrase)
+
+                    file = []
         except BadPasswordException as e:
             self.clear()
             raise e
