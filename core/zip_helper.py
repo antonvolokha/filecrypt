@@ -19,7 +19,7 @@ def create_zip_from_paths(paths: list, output_zip_file: str, password: str | Non
     with pyzipper.AESZipFile(output_zip_file,
                              'w',
                              compression=pyzipper.ZIP_DEFLATED,
-                             encryption=pyzipper.WZ_AES,
+                             encryption=pyzipper.WZ_AES if password is not None else None,
                              ) as zf:
         if password is not None:
             zf.setpassword(password.encode('utf-8'))

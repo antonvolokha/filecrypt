@@ -5,11 +5,11 @@ delimiter_encoded = delimiter.encode()
 
 
 class FileMetaData:
-
     def __init__(self, filename: str | None = None, filepath: str | None = None, json_data: bytes | None = None):
         if json_data is not None:
             info = json.loads(json_data)
             filename = info['filename']
+            filepath = filename
 
         self.filename = filename
         self.filepath = filepath or filename
