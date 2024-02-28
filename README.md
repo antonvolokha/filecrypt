@@ -1,5 +1,7 @@
 # Crypt File like a Mr. Robot
 
+[![codecov](https://codecov.io/gh/antonvolokha/filecrypt/branch/master/graph/badge.svg?token=DETY2Q1VFY)](https://codecov.io/gh/antonvolokha/filecrypt)
+
 This is a simple cli app allow to combine file and folders with images or audio files
 
 ## Compile & Install
