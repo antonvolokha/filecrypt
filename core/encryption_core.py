@@ -1,5 +1,6 @@
 import os
 
+from core.exception.bad_passwprd_exception import BadPasswordException
 from core.file_meta_data import FileMetaData, delimiter_encoded
 from core.zip_helper import create_zip_from_paths, unzip_to_directory, create_tmp_zip_file
 
@@ -40,23 +41,27 @@ class EncryptionCore:
         self.clear()
 
     def decrypt(self):
-        with open(self.input_file, 'rb') as infile:
-            file = []
-            for line in infile.readlines():
-                if delimiter_encoded in line:
-                    metadata = FileMetaData(json_data=line.replace(delimiter_encoded, ''.encode()))
+        try:
+            with open(self.input_file, 'rb') as infile:
+                file = []
+                for line in infile.readlines():
+                    if delimiter_encoded in line:
+                        metadata = FileMetaData(json_data=line.replace(delimiter_encoded, ''.encode()))
 
-                    if metadata.is_zip():
-                        self.zip_file = metadata
-                        with open(metadata.filepath, 'wb') as outfile:
-                            outfile.writelines(file)
+                        if metadata.is_zip():
+                            self.zip_file = metadata
+                            with open(metadata.filepath, 'wb') as outfile:
+                                outfile.writelines(file)
 
-                        unzip_to_directory(metadata.filepath, self.passphrase)
+                            unzip_to_directory(metadata.filepath, self.passphrase)
 
-                    file = []
-                    continue
+                        file = []
+                        continue
 
-                file.append(line)
+                    file.append(line)
+        except BadPasswordException as e:
+            self.clear()
+            raise e
 
         self.clear()
 

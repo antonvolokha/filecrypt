@@ -5,6 +5,7 @@ import pyzipper
 import uuid
 import tempfile
 
+from core.exception.bad_passwprd_exception import BadPasswordException
 from core.file_meta_data import FileMetaData
 
 
@@ -46,15 +47,22 @@ def unzip_to_directory(zip_file_path: str, password: str | None = None):
     # Extract the directory name from the zip file path and remove the extension
     output_directory = os.path.splitext(zip_file_path)[0]
 
-    # Create the output directory if it doesn't already exist
-    if not os.path.exists(output_directory):
-        os.makedirs(output_directory)
+    try:
+        if not os.path.exists(output_directory):
+            os.makedirs(output_directory)
 
-    # Unzip the files
-    with pyzipper.AESZipFile(zip_file_path, 'r') as zip_ref:
-        if password is not None:
-            zip_ref.pwd = password.encode('utf-8')
-        zip_ref.extractall(output_directory)
+        with pyzipper.AESZipFile(zip_file_path, 'r') as zip_ref:
+            if password is not None:
+                zip_ref.pwd = password.encode('utf-8')
+            zip_ref.extractall(output_directory)
+
+    except Exception as e:
+        os.rmdir(output_directory)
+
+        if 'Bad password for file' in str(e):
+            raise BadPasswordException()
+
+        raise e
 
 
 def create_tmp_zip_file() -> FileMetaData:

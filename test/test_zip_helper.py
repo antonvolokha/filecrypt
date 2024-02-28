@@ -89,6 +89,6 @@ def test_zip_with_pass_wrong():
     try:
         unzip_to_directory(arch_file, password='wrong')
     except Exception as e:
-        assert 'Bad password for file' in str(e)
+        assert 'Bad password exception' in str(e)
 
     os.remove(arch_file)

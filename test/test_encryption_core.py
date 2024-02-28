@@ -90,5 +90,5 @@ def test_decrypt_with_invalid_pass():
     try:
         core.decrypt()
     except Exception as e:
-        assert 'Bad password for file' in str(e)
+        assert 'Bad password exception' in str(e)
 
