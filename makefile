@@ -14,7 +14,7 @@ dependency:
 
 testing:
 	@echo "Testing code..."
-	pytest
+	pytest --cov=core --cov-report=xml tests/
 
 build:
 	@echo "Creating binary..."

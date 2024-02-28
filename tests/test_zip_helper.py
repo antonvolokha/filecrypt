@@ -3,7 +3,7 @@ import shutil
 import tempfile
 
 from core.zip_helper import create_tmp_zip_file, create_zip_from_paths, unzip_to_directory
-from test.test_helper import is_uuid_v4
+from tests.test_helper import is_uuid_v4
 
 
 def test_create_tmp_zip_file():
@@ -23,7 +23,7 @@ def test_create_tmp_zip_file():
 
 
 def test_zip_without_pass():
-    files = ['test/data/song_orig.mp3', 'test/data/very_secret_doc.pdf']
+    files = ['tests/data/song_orig.mp3', 'tests/data/very_secret_doc.pdf']
     arch_name = 'test_arch'
     arch_file = f'{arch_name}.zip'
     create_zip_from_paths(paths=files, output_zip_file=arch_file)
@@ -40,7 +40,7 @@ def test_zip_without_pass():
 
 
 def test_zip_with_pass_success():
-    files = ['test/data/song_orig.mp3', 'test/data/very_secret_doc.pdf']
+    files = ['tests/data/song_orig.mp3', 'tests/data/very_secret_doc.pdf']
     arch_name = 'test_arch'
     arch_file = f'{arch_name}.zip'
     password = '1234'
@@ -59,7 +59,7 @@ def test_zip_with_pass_success():
 
 
 def test_zip_with_pass_failed():
-    files = ['test/data/song_orig.mp3', 'test/data/very_secret_doc.pdf']
+    files = ['tests/data/song_orig.mp3', 'tests/data/very_secret_doc.pdf']
     arch_name = 'test_arch'
     arch_file = f'{arch_name}.zip'
     password = '1234'
@@ -77,7 +77,7 @@ def test_zip_with_pass_failed():
 
 
 def test_zip_with_pass_wrong():
-    files = ['test/data/song_orig.mp3', 'test/data/very_secret_doc.pdf']
+    files = ['tests/data/song_orig.mp3', 'tests/data/very_secret_doc.pdf']
     arch_name = 'test_arch'
     arch_file = f'{arch_name}.zip'
     password = '1234'

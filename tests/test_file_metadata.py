@@ -4,8 +4,8 @@ from core.file_meta_data import FileMetaData
 
 
 def test_file_metadata_setup():
-    filename = 'test.zip'
-    filepath = 'test/test.zip'
+    filename = 'tests.zip'
+    filepath = 'tests/tests.zip'
 
     meta = FileMetaData(filename=filename, filepath=filepath)
 
@@ -14,7 +14,7 @@ def test_file_metadata_setup():
 
 
 def test_file_metadata_setup_filename_only():
-    filename = 'test.zip'
+    filename = 'tests.zip'
     meta = FileMetaData(filename=filename)
 
     assert meta.filename == filename
@@ -23,9 +23,9 @@ def test_file_metadata_setup_filename_only():
 
 
 def test_file_metadata_setup_all_fields():
-    filename = 'test.zip'
+    filename = 'tests.zip'
     filename_json = 'test2.zip'
-    filepath = 'test/test.zip'
+    filepath = 'tests/tests.zip'
     json_data = '{"filename": "' + filename_json + '"}'
 
     meta = FileMetaData(filename=filename, filepath=filepath, json_data=json_data.encode())
@@ -74,12 +74,12 @@ def test_file_metadata_empty():
 
 
 def test_to_json_string():
-    filename = 'test.zip'
+    filename = 'tests.zip'
     meta = FileMetaData(filename=filename)
 
 
 def test_encode():
-    filename = 'test.zip'
+    filename = 'tests.zip'
     delimiter = '===='
     json_data = json.dumps({"filename": filename})
     expected = f"\n{delimiter}{json_data}{delimiter}\n".encode()
@@ -90,7 +90,7 @@ def test_encode():
 
 
 def test_is_zip():
-    filename = 'test.rar'
+    filename = 'tests.rar'
     meta = FileMetaData(filename=filename)
 
     assert not meta.is_zip()
