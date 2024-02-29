@@ -1,5 +1,8 @@
 import getpass
+
+from sys import exit
 from argparse import Namespace
+
 
 def print_logo():
     print('    ._______ .______  .______  ._____.___ .______  .______       ._______ .______   ____   ____._______ _____._._______      ')
@@ -11,9 +14,6 @@ def print_logo():
     print('                       :                                          :                                               :          ')
     print('                                                                                                                             ')
     print('                                                                                                                             ')
-
-
-
 
 
 def passphrase_input():
